@@ -1,0 +1,20 @@
+{
+	"0": {
+		"emp_id": 123456,
+		"emp_fname": "Bob",
+		"emp_lname": "Dobbs",
+		"emp_info": "President"
+	},
+	"1": {
+		"emp_id": 123457,
+		"emp_fname": "Jenny",
+		"emp_lname": "Jones",
+		"emp_info": "Teller"
+	},
+	"2": {
+		"emp_id": 123458,
+		"emp_fname": "Jerry",
+		"emp_lname": "Packard",
+		"emp_info": "Loan Officer"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"0": {
+		"cust_id": 654321,
+		"cust_fname": "Sarah",
+		"cust_lname": "Connor",
+		"cust_info": "Mercenary"
+	},
+	"1": {
+		"cust_id": 754321,
+		"cust_fname": "John",
+		"cust_lname": "Connor",
+		"cust_info": "Leader"
+	},
+	"2": {
+		"cust_id": 854321,
+		"cust_fname": "Kyle",
+		"cust_lname": "Reese",
+		"cust_info": "Soldier"
+	}
+}
