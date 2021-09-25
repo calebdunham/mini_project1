@@ -8,45 +8,64 @@
 # 
 #######################################################
 import pandas as pd
+from datetime import datetime
+import pathlib
 
 
 class BankingSystem:
+    _log_file = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\user_activity_log.csv')
+    _emp_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\EmployeeDB.json')
 
     def __init__(self):
         """
 
         """
-        self.employee_id = int(input('Enter Employee ID: '))
-        pass
+        self._employee_id = 111111
 
     def _confirm_emp(self):
-        if self._emp_db.loc[self._emp_db.emp_id == self.employee_id].empty:
+        if self._emp_db.loc[self._emp_db.emp_id == self._employee_id].empty:
+            self._get_activity_dt('EMP NOT FOUND')
             print('Employee not found.')
         else:
-            self.curr_emp = self._emp_db.loc[self._emp_db.emp_id == self.employee_id]
+            self.curr_emp = self._emp_db.loc[self._emp_db.emp_id == self._employee_id]
+            self._get_activity_dt('EMP CONFIRMED')
             print('Employee confirmed.')
-        pass
 
     def _connect_emp_db(self):
-        self._emp_db = pd.read_json(r'G:\My Drive\Springboard\gitRepo\mini_project1\EmployeeDB.json', orient='index')
+        self._emp_db = pd.read_json(self._emp_db_path, orient='index')
+        self._get_activity_dt('CONNECTED EMP DB')
         self._confirm_emp()
-        pass
 
-    def _get_activity_dt(self):
-        pass
+    def _get_activity_dt(self, activity):
+        self._activity = [self._employee_id, activity, datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]]
+        self._log_activity()
 
     def _log_activity(self):
-        pass
+        lg_df = pd.DataFrame(self._activity).T
+        if self._log_file.is_file():
+            lg_df.to_csv(self._log_file, mode='a', index=False, header=False)
+        else:
+            lg_df.to_csv(self._log_file, index=False, header=False)
 
     def get_emp_info(self):
-        for k, v in self.curr_emp.items():
+        for k, v in self.curr_emp.reset_index(drop=True).items():
             setattr(self, k, v[0])
-
-        pass
+            print(f'{k}: {v[0]}')
+        self._get_activity_dt('GET EMP INFO')
 
     def login(self):
+        self._employee_id = int(input('Enter Employee ID: '))
+        self._get_activity_dt('LOGIN')
         self._connect_emp_db()
-        pass
 
     def logout(self):
-        pass
+        self._get_activity_dt('LOGOUT')
+        del self._activity
+        print('Successfully Logged Out.')
+
+
+if __name__ == '__main__':
+    bs = BankingSystem()
+    bs.login()
+    bs.get_emp_info()
+    bs.logout()
