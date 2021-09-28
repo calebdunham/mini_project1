@@ -21,14 +21,18 @@ class BankingSystem:
 
         """
         self._employee_id = 111111
+        self._customer_id = 222222
+        self._confirmed_emp = False
 
     def _confirm_emp(self):
         if self._emp_db.loc[self._emp_db.emp_id == self._employee_id].empty:
             self._get_activity_dt('EMP NOT FOUND')
+            self._confirmed_emp = False
             print('Employee not found.')
         else:
             self.curr_emp = self._emp_db.loc[self._emp_db.emp_id == self._employee_id]
             self._get_activity_dt('EMP CONFIRMED')
+            self._confirmed_emp = True
             print('Employee confirmed.')
 
     def _connect_emp_db(self):
@@ -62,10 +66,3 @@ class BankingSystem:
         self._get_activity_dt('LOGOUT')
         del self._activity
         print('Successfully Logged Out.')
-
-
-if __name__ == '__main__':
-    bs = BankingSystem()
-    bs.login()
-    bs.get_emp_info()
-    bs.logout()

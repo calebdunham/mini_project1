@@ -7,20 +7,50 @@
 # Original author: caleb
 # 
 #######################################################
+import BankingSystem
+import pandas as pd
+import pathlib
 
 
-class Customer:
-    def __init__():
+# noinspection SpellCheckingInspection
+class Customer(BankingSystem.BankingSystem):
+    _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.json')
+
+    def __init__(self):
+        BankingSystem.BankingSystem.__init__(self)
+        if self._confirmed_emp:
+            pass
+        else:
+            print('Employee Login Not Confirmed')
+            BankingSystem.BankingSystem.login(self)
+
+    def _confirm_cust(self):
+        if self._cust_db.loc[self._cust_db.cust_id == self._customer_id].empty:
+            self._get_activity_dt('CUST NOT FOUND')
+            self._confirmed_cust = False
+            print('Customer not found.')
+        else:
+            self.curr_cust = self._cust_db.loc[self._cust_db.cust_id == self._customer_id]
+            self._get_activity_dt('CUST CONFIRMED')
+            self._confirmed_cust = True
+            print('Customer confirmed.')
+
+    def _connect_cust_db(self):
+        self._cust_db = pd.read_json(self._cust_db_path, orient='index')
+        self._get_activity_dt('CONNECTED CUST DB')
+        self._confirm_cust()
+
+    def add_customer(self):
         pass
 
-    def _connect_cust_db():
+    def del_customer(self):
         pass
 
-    def add_customer():
-        pass
-
-    def del_customer():
-        pass
-
-    def get_customer_info():
-        pass
+    def get_customer_info(self):
+        self._customer_id = int(input('Enter Customer ID: '))
+        self._get_activity_dt('GET CUST INFO')
+        self._connect_cust_db()
+        if self._confirmed_cust:
+            print('True')
+        else:
+            print('False')

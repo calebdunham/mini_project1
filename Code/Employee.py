@@ -7,14 +7,13 @@
 # Original author: caleb
 # 
 #######################################################
+import BankingSystem
 
 
-class Employee:
-    def __init__():
+class Employee(BankingSystem.BankingSystem):
+
+    def add_employee(self):
         pass
 
-    def add_employee():
-        pass
-
-    def del_employee():
+    def del_employee(self):
         pass
