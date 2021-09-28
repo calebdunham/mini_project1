@@ -14,7 +14,7 @@ import pathlib
 
 class BankingSystem:
     _log_file = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\user_activity_log.csv')
-    _emp_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\EmployeeDB.json')
+    _emp_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\EmployeeDB.txt')
 
     def __init__(self):
         """
@@ -36,7 +36,7 @@ class BankingSystem:
             print('Employee confirmed.')
 
     def _connect_emp_db(self):
-        self._emp_db = pd.read_json(self._emp_db_path, orient='index')
+        self._emp_db = pd.read_csv(self._emp_db_path)
         self._get_activity_dt('CONNECTED EMP DB')
         self._confirm_emp()
 
@@ -52,7 +52,7 @@ class BankingSystem:
             lg_df.to_csv(self._log_file, index=False, header=False)
 
     def get_emp_info(self):
-        for k, v in self.curr_emp.reset_index(drop=True).items():
+        for k, v in self.curr_emp.items():
             setattr(self, k, v[0])
             print(f'{k}: {v[0]}')
         self._get_activity_dt('GET EMP INFO')

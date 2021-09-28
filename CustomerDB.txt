@@ -1,0 +1,5 @@
+cust_id,cust_fname,cust_lname,cust_info
+654321,Sarah,Connor,Mercenary
+754321,John,Connor,Leader
+854321,Kyle,Reese,Soldier
+744822,Todd,Voight,Foster Dad

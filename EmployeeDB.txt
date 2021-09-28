@@ -1,0 +1,4 @@
+emp_id,emp_fname,emp_lname,emp_info
+123456,Bob,Dobbs,President
+123457,Jenny,Jones,Teller
+123458,Jerry,Packard,"Loan Officer"

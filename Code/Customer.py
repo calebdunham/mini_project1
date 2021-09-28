@@ -10,11 +10,13 @@
 import BankingSystem
 import pandas as pd
 import pathlib
+from random import randint
+from csv import writer
 
 
 # noinspection SpellCheckingInspection
 class Customer(BankingSystem.BankingSystem):
-    _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.json')
+    _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.txt')
 
     def __init__(self):
         BankingSystem.BankingSystem.__init__(self)
@@ -36,12 +38,31 @@ class Customer(BankingSystem.BankingSystem):
             print('Customer confirmed.')
 
     def _connect_cust_db(self):
-        self._cust_db = pd.read_json(self._cust_db_path, orient='index')
+        self._cust_db = pd.read_csv(self._cust_db_path)
         self._get_activity_dt('CONNECTED CUST DB')
         self._confirm_cust()
 
     def add_customer(self):
-        pass
+
+        def gen_id():
+            range_start = 10 ** (6 - 1)
+            range_end = (10 ** 6) - 1
+            cid = randint(range_start, range_end)
+            while not self._cust_db.loc[self._cust_db.cust_id == cid].empty:
+                gen_id()
+            return cid
+
+        new_customer_id = gen_id()
+        new_cust_fname = input('Enter Customer First Name: ')
+        new_cust_lname = input('Enter Customer Last Name: ')
+        new_cust_info = input('Enter Customer Info: ')
+        new_cust = pd.DataFrame({'emp_id': new_customer_id, 'emp_fname': new_cust_fname, 'emp_lname': new_cust_lname,
+                                 'emp_info': new_cust_info}, index=[0])
+        new_cust.to_csv(self._cust_db_path, mode='a', index=False, header=False)
+        print('Customer Added\n--------------')
+        for k, v in new_cust.items():
+            # setattr(self, k, v[0])
+            print(f'{k}: {v[0]}')
 
     def del_customer(self):
         pass
