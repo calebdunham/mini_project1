@@ -7,24 +7,23 @@
 # Original author: caleb
 # 
 #######################################################
-import BankingSystem
+from BankingSystem import BankingSystem
 import pandas as pd
 import pathlib
 from random import randint
-from csv import writer
 
 
 # noinspection SpellCheckingInspection
-class Customer(BankingSystem.BankingSystem):
+class Customer(BankingSystem):
     _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.txt')
 
     def __init__(self):
-        BankingSystem.BankingSystem.__init__(self)
+        BankingSystem.__init__(self)
         if self._confirmed_emp:
             pass
         else:
             print('Employee Login Not Confirmed')
-            BankingSystem.BankingSystem.login(self)
+            BankingSystem.login(self)
 
     def _confirm_cust(self):
         if self._cust_db.loc[self._cust_db.cust_id == self._customer_id].empty:
@@ -56,13 +55,14 @@ class Customer(BankingSystem.BankingSystem):
         new_cust_fname = input('Enter Customer First Name: ')
         new_cust_lname = input('Enter Customer Last Name: ')
         new_cust_info = input('Enter Customer Info: ')
-        new_cust = pd.DataFrame({'emp_id': new_customer_id, 'emp_fname': new_cust_fname, 'emp_lname': new_cust_lname,
-                                 'emp_info': new_cust_info}, index=[0])
+        new_cust = pd.DataFrame({'cust_id': new_customer_id, 'cust_fname': new_cust_fname, 'cust_lname': new_cust_lname,
+                                 'cust_info': new_cust_info}, index=[0])
         new_cust.to_csv(self._cust_db_path, mode='a', index=False, header=False)
         print('Customer Added\n--------------')
         for k, v in new_cust.items():
             # setattr(self, k, v[0])
             print(f'{k}: {v[0]}')
+        self._get_activity_dt('CUSTOMER ADDED')
 
     def del_customer(self):
         pass
@@ -71,7 +71,3 @@ class Customer(BankingSystem.BankingSystem):
         self._customer_id = int(input('Enter Customer ID: '))
         self._get_activity_dt('GET CUST INFO')
         self._connect_cust_db()
-        if self._confirmed_cust:
-            print('True')
-        else:
-            print('False')

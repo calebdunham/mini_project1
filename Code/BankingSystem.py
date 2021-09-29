@@ -23,6 +23,7 @@ class BankingSystem:
         self._employee_id = 111111
         self._customer_id = 222222
         self._confirmed_emp = False
+        self._confirmed_cust = False
 
     def _confirm_emp(self):
         if self._emp_db.loc[self._emp_db.emp_id == self._employee_id].empty:

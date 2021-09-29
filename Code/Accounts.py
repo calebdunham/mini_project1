@@ -7,26 +7,70 @@
 # Original author: caleb
 # 
 #######################################################
+import Customer
+import pathlib
+import pandas as pd
 
 
-class Accounts:
-    def __init__():
+class Accounts(Customer.Customer):
+    _acct_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\AccountActivityDB.txt')
+
+    def __init__(self):
+        Customer.Customer.__init__(self)
+        self._account_types = {'checking': 1, 'savings': 2}
+        self._acct_activity = {'deposit': 1, 'withdrawal': 2, 'balance': 3}
+        if self._confirmed_cust:
+            pass
+        else:
+            print('Customer Not Confirmed')
+            Customer.Customer.get_customer_info(self)
+
+    def _connect_acct_db(self):
+        self._acct_db = pd.read_csv(self._acct_db_path)
+        self._get_activity_dt('CONNECTED ACCT DB')
+        self._confirm_acct()
+
+    def _confirm_acct(self):
+        if self._acct_db.loc[self._acct_db.cust_id == self._customer_id].empty:
+            self._get_activity_dt('CUSTOMER ACCT NOT FOUND')
+            self._confirmed_acct = False
+            print('Customer account not found.')
+        else:
+            self.curr_acct = self._acct_db.loc[self._acct_db.cust_id == self._customer_id]
+            self._get_activity_dt('CUSTOMER ACCT CONFIRMED')
+            self._confirmed_acct = True
+            print('Customer account confirmed.')
+
+    def _get_account_type(self):
+        acct_type = input('Enter Account Type (Checking/Savings): ')
+        if acct_type.lower() in self._account_types.keys():
+            self._get_activity_dt('ACCT TYPE SELECTED')
+            return acct_type
+        else:
+            print('Enter "Checking" or "Savings"')
+            self._get_activity_dt('INCORRECT ACCT TYPE')
+            self._get_account_type()
+
+    def add_account(self):
         pass
 
-    def _account_type():
+    def balance(self):
+        self._connect_acct_db()
+        if self._confirmed_acct:
+            acct_type = self._get_account_type()
+            if self.curr_acct.loc[self.curr_acct.acct_id == self._account_types[acct_type]].empty:
+                print(f'No Account of Type: {acct_type}')
+            else:
+                print('Account Type Located')
+
+        else:
+            pass
+
+    def del_account(self):
         pass
 
-    def add_account():
+    def deposit(self):
         pass
 
-    def balance():
-        pass
-
-    def del_account():
-        pass
-
-    def deposit():
-        pass
-
-    def withdrawl():
+    def withdrawal(self):
         pass

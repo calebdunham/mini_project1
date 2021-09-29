@@ -3,3 +3,4 @@ cust_id,cust_fname,cust_lname,cust_info
 754321,John,Connor,Leader
 854321,Kyle,Reese,Soldier
 744822,Todd,Voight,Foster Dad
+991146,Malcolm,Reynolds,Pilot
