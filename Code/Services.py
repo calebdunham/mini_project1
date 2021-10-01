@@ -7,17 +7,52 @@
 # Original author: caleb
 # 
 #######################################################
+from Customer import Customer
+import pathlib
+from datetime import datetime
+from random import randint
+import pandas as pd
 
 
-class Services:
-    def __init__():
+class Services(Customer):
+    _serv_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerServicesDB.txt')
+
+    def __init__(self):
+        Customer.__init__(self)
+        self._service_types = {'credit_card': 3, 'loan': 4}
+        if self._confirmed_cust:
+            pass
+        else:
+            print('Customer Not Confirmed')
+            Customer.get_customer_info(self)
+
+    def _connect_serv_db(self):
+        self._serv_db = pd.read_csv(self._serv_db_path)
+        self._get_activity_dt('CONNECTED SERV DB')
+
+    def _confirm_serv(self):
+        if self._serv_db.loc[self._serv_db.serv_id == self._service_id].empty:
+            self._get_activity_dt('SERVICE NOT FOUND')
+            self._confirmed_serv = False
+            print('Customer not found.')
+        else:
+            self.curr_cust = self._cust_db.loc[self._cust_db.cust_id == self._customer_id]
+            self._get_activity_dt('CUST CONFIRMED')
+            self._confirmed_cust = True
+            print('Customer confirmed.')
+
+    def _service_type(self):
         pass
 
-    def _service_type():
-        pass
+    def add_service(self):
 
-    def add_service():
-        pass
+        # def gen_id():
+        #     range_start = 10 ** (6 - 1)
+        #     range_end = (10 ** 6) - 1
+        #     sid = randint(range_start, range_end)
+        #     while not self._cust_db.loc[self._cust_db.cust_id == sid].empty:
+        #         gen_id()
+        #     return sid
 
-    def del_service():
+    def del_service(self):
         pass

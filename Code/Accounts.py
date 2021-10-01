@@ -7,23 +7,24 @@
 # Original author: caleb
 # 
 #######################################################
-import Customer
+from Customer import Customer
 import pathlib
+from datetime import datetime
 import pandas as pd
 
 
-class Accounts(Customer.Customer):
+class Accounts(Customer):
     _acct_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\AccountActivityDB.txt')
 
     def __init__(self):
-        Customer.Customer.__init__(self)
+        Customer.__init__(self)
         self._account_types = {'checking': 1, 'savings': 2}
         self._acct_activity = {'deposit': 1, 'withdrawal': 2, 'balance': 3}
         if self._confirmed_cust:
             pass
         else:
             print('Customer Not Confirmed')
-            Customer.Customer.get_customer_info(self)
+            Customer.get_customer_info(self)
 
     def _connect_acct_db(self):
         self._acct_db = pd.read_csv(self._acct_db_path)
@@ -45,32 +46,69 @@ class Accounts(Customer.Customer):
         acct_type = input('Enter Account Type (Checking/Savings): ')
         if acct_type.lower() in self._account_types.keys():
             self._get_activity_dt('ACCT TYPE SELECTED')
-            return acct_type
+            if self.curr_acct.loc[self.curr_acct.acct_id == self._account_types[acct_type]].empty:
+                print(f'No Account of Type: {acct_type}')
+                curr_activity = None
+                self._get_activity_dt('ACCT TYPE NOT FOUND')
+            else:
+                curr_activity = self.curr_acct[self.curr_acct.groupby('acct_id')['tran_date'].transform(max) ==
+                                               self.curr_acct.tran_date].query(f'acct_id == '
+                                                                               f'{self._account_types[acct_type]}')
+            return curr_activity
         else:
             print('Enter "Checking" or "Savings"')
             self._get_activity_dt('INCORRECT ACCT TYPE')
             self._get_account_type()
 
-    def add_account(self):
-        pass
+    def _complete_transaction(self, curr_activity, tran_type, tran_amount, new_balance):
+        new_acct_activity = pd.DataFrame(
+            {'cust_id': self._customer_id, 'acct_id': curr_activity.acct_id.values[0],
+             'tran_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3], 'transaction': tran_type,
+             'tran_amount': tran_amount, 'starting_balance': curr_activity.ending_balance.values[0],
+             'ending_balance': new_balance}, index=[0])
+        new_acct_activity.to_csv(self._acct_db_path, mode='a', index=False, header=False)
+        self._get_activity_dt('COMPLETED TRANSACTION')
+
+    # def add_account(self):
+    #     pass
 
     def balance(self):
         self._connect_acct_db()
         if self._confirmed_acct:
-            acct_type = self._get_account_type()
-            if self.curr_acct.loc[self.curr_acct.acct_id == self._account_types[acct_type]].empty:
-                print(f'No Account of Type: {acct_type}')
-            else:
-                print('Account Type Located')
-
+            curr_activity = self._get_account_type()
+            if curr_activity is not None:
+                print(f'Current Balance: ${curr_activity.ending_balance.values[0]}')
+                self._get_activity_dt('RETRIEVED BALANCE')
         else:
-            pass
+            print(f'No Account for Customer: {self._customer_id}')
 
-    def del_account(self):
-        pass
+    # def del_account(self):
+    #     pass
 
     def deposit(self):
-        pass
+        self._connect_acct_db()
+        if self._confirmed_acct:
+            curr_activity = self._get_account_type()
+            if curr_activity is not None:
+                dep_amt = float(input('Enter Amount to Deposit: '))
+                new_balance = dep_amt + float(curr_activity.ending_balance.values[0])
+                self._complete_transaction(curr_activity, 'd', dep_amt, new_balance)
+                print(f'Current Balance: ${float(curr_activity.ending_balance.values[0])} '
+                      f'- New Balance: ${new_balance}')
+                self._get_activity_dt('COMPLETED DEPOSIT')
+        else:
+            print(f'No Account for Customer: {self._customer_id}')
 
     def withdrawal(self):
-        pass
+        self._connect_acct_db()
+        if self._confirmed_acct:
+            curr_activity = self._get_account_type()
+            if curr_activity is not None:
+                wth_amt = float(input('Enter Amount to Withdrawal: '))
+                new_balance = float(curr_activity.ending_balance.values[0]) - wth_amt
+                self._complete_transaction(curr_activity, 'w', wth_amt, new_balance)
+                print(f'Current Balance: ${float(curr_activity.ending_balance.values[0])} '
+                      f'- New Balance: ${new_balance}')
+                self._get_activity_dt('COMPLETED WITHDRAWAL')
+        else:
+            print(f'No Account for Customer: {self._customer_id}')

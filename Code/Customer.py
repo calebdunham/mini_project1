@@ -64,8 +64,8 @@ class Customer(BankingSystem):
             print(f'{k}: {v[0]}')
         self._get_activity_dt('CUSTOMER ADDED')
 
-    def del_customer(self):
-        pass
+    # def del_customer(self):
+    #     pass
 
     def get_customer_info(self):
         self._customer_id = int(input('Enter Customer ID: '))
