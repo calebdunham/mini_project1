@@ -13,7 +13,6 @@ import pathlib
 from random import randint
 
 
-# noinspection SpellCheckingInspection
 class Customer(BankingSystem):
     _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.txt')
 
@@ -39,19 +38,27 @@ class Customer(BankingSystem):
     def _connect_cust_db(self):
         self._cust_db = pd.read_csv(self._cust_db_path)
         self._get_activity_dt('CONNECTED CUST DB')
-        self._confirm_cust()
+
+    @classmethod
+    def gen_id(cls):
+        range_start = 10 ** (6 - 1)
+        range_end = (10 ** 6) - 1
+        return randint(range_start, range_end)
 
     def add_customer(self):
 
-        def gen_id():
-            range_start = 10 ** (6 - 1)
-            range_end = (10 ** 6) - 1
-            cid = randint(range_start, range_end)
-            while not self._cust_db.loc[self._cust_db.cust_id == cid].empty:
-                gen_id()
-            return cid
-
-        new_customer_id = gen_id()
+        # def gen_id():
+        #     range_start = 10 ** (6 - 1)
+        #     range_end = (10 ** 6) - 1
+        #     cid = randint(range_start, range_end)
+        #     while not self._cust_db.loc[self._cust_db.cust_id == cid].empty:
+        #         gen_id()
+        #     return cid
+        self._connect_cust_db()
+        while True:
+            new_customer_id = self.gen_id()
+            if self._cust_db.loc[self._cust_db.cust_id == new_customer_id].empty:
+                break
         new_cust_fname = input('Enter Customer First Name: ')
         new_cust_lname = input('Enter Customer Last Name: ')
         new_cust_info = input('Enter Customer Info: ')
@@ -71,3 +78,4 @@ class Customer(BankingSystem):
         self._customer_id = int(input('Enter Customer ID: '))
         self._get_activity_dt('GET CUST INFO')
         self._connect_cust_db()
+        self._confirm_cust()

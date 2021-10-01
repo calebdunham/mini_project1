@@ -32,27 +32,20 @@ class Services(Customer):
 
     def _confirm_serv(self):
         if self._serv_db.loc[self._serv_db.serv_id == self._service_id].empty:
-            self._get_activity_dt('SERVICE NOT FOUND')
+            self._get_activity_dt('SERV NOT FOUND')
             self._confirmed_serv = False
-            print('Customer not found.')
+            print('Service not found.')
         else:
-            self.curr_cust = self._cust_db.loc[self._cust_db.cust_id == self._customer_id]
-            self._get_activity_dt('CUST CONFIRMED')
+            self.curr_cust_serv = self._serv_db.loc[self._serv_db.serv_id == self._service_id]
+            self._get_activity_dt('SERV CONFIRMED')
             self._confirmed_cust = True
-            print('Customer confirmed.')
+            print('Service confirmed.')
 
     def _service_type(self):
         pass
 
     def add_service(self):
-
-        # def gen_id():
-        #     range_start = 10 ** (6 - 1)
-        #     range_end = (10 ** 6) - 1
-        #     sid = randint(range_start, range_end)
-        #     while not self._cust_db.loc[self._cust_db.cust_id == sid].empty:
-        #         gen_id()
-        #     return sid
+        print(Customer.gen_id())
 
     def del_service(self):
         pass
