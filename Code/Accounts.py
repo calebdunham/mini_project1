@@ -14,24 +14,53 @@ import pandas as pd
 
 
 class Accounts(Customer):
+    """
+    The Accounts Class is where customer account activity is performed
+    ...
+
+    Attributes
+    ----------
+    _acct_db_path : pathlib
+        path to the account activity database
+
+    Methods
+    -------
+    _confirm_acct()
+        confirms requested customer id is found in account activity database
+    _connect_acct_db()
+        connects to account activity database
+    _get_account_type()
+        requests the input of account type of interest and confirms input is
+        valid
+    _complete_transaction()
+        records account transaction to account activity database
+    balance()
+        displays current balance of confirmed customer id
+    deposit()
+        adds entered deposit amount to customer balance
+    withdrawal()
+        subtracts entered withdrawal amount from customer balance
+    """
     _acct_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\AccountActivityDB.txt')
 
     def __init__(self):
+        """
+        Parameters
+        ----------
+        _account_types : dict
+            valid account types
+        """
         Customer.__init__(self)
         self._account_types = {'checking': 1, 'savings': 2}
-        self._acct_activity = {'deposit': 1, 'withdrawal': 2, 'balance': 3}
         if self._confirmed_cust:
             pass
         else:
             print('Customer Not Confirmed')
             Customer.get_customer_info(self)
 
-    def _connect_acct_db(self):
-        self._acct_db = pd.read_csv(self._acct_db_path)
-        self._get_activity_dt('CONNECTED ACCT DB')
-        self._confirm_acct()
-
     def _confirm_acct(self):
+        """Confirms customer id is found in account activity database.
+        """
         if self._acct_db.loc[self._acct_db.cust_id == self._customer_id].empty:
             self._get_activity_dt('CUSTOMER ACCT NOT FOUND')
             self._confirmed_acct = False
@@ -42,7 +71,17 @@ class Accounts(Customer):
             self._confirmed_acct = True
             print('Customer account confirmed.')
 
+    def _connect_acct_db(self):
+        """Creates connection to account activity database.
+        """
+        self._acct_db = pd.read_csv(self._acct_db_path)
+        self._get_activity_dt('CONNECTED ACCT DB')
+        self._confirm_acct()
+
     def _get_account_type(self):
+        """Requests type of account (checking or savings) on which activity will be performed
+        and retrieves most recent account activity for the current customer id and account type.
+        """
         acct_type = input('Enter Account Type (Checking/Savings): ')
         if acct_type.lower() in self._account_types.keys():
             self._get_activity_dt('ACCT TYPE SELECTED')
@@ -61,6 +100,19 @@ class Accounts(Customer):
             self._get_account_type()
 
     def _complete_transaction(self, curr_activity, tran_type, tran_amount, new_balance):
+        """Records customer account activity to account activity database.
+
+        Parameters
+        ----------
+        curr_activity : DataFrame
+            Most recent customer activity for account type selected
+        tran_type : str
+            Indicates type of transaction initiated (d : deposit, w : withdrawal)
+        tran_amount : float
+            Amount of transaction
+        new_balance : float
+            Current balance + tran_amount
+        """
         new_acct_activity = pd.DataFrame(
             {'cust_id': self._customer_id, 'acct_id': curr_activity.acct_id.values[0],
              'tran_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3], 'transaction': tran_type,
@@ -70,6 +122,8 @@ class Accounts(Customer):
         self._get_activity_dt('COMPLETED TRANSACTION')
 
     # def add_account(self):
+        """To be added in future version release.
+        """
     #     pass
 
     def balance(self):
@@ -83,9 +137,13 @@ class Accounts(Customer):
             print(f'No Account for Customer: {self._customer_id}')
 
     # def del_account(self):
+        """To be added in future version release.
+        """
     #     pass
 
     def deposit(self):
+        """Adds deposit amount indicated to current account balance..
+        """
         self._connect_acct_db()
         if self._confirmed_acct:
             curr_activity = self._get_account_type()
@@ -100,6 +158,8 @@ class Accounts(Customer):
             print(f'No Account for Customer: {self._customer_id}')
 
     def withdrawal(self):
+        """Subtracts withdrawal amount indicated from current account balance.
+        """
         self._connect_acct_db()
         if self._confirmed_acct:
             curr_activity = self._get_account_type()

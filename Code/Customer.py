@@ -14,9 +14,37 @@ from random import randint
 
 
 class Customer(BankingSystem):
+    """
+    The Customer Class is where customer verification is performed
+    as well as the adding of new customers
+    ...
+
+    Attributes
+    ----------
+    _cust_db_path : pathlib
+        path to the customer database
+
+    Methods
+    -------
+    _confirm_cust()
+        confirms entered customer id is found in database
+    _connect_cust_db()
+        connects to customer database
+    gen_id()
+        generates a random 6 digit id
+    add_customer()
+        adds new customer
+    get_cust_info()
+        displays confirmed customer information
+    """
     _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.txt')
 
     def __init__(self):
+        """
+        Parameters
+        ----------
+        """
+
         BankingSystem.__init__(self)
         if self._confirmed_emp:
             pass
@@ -25,6 +53,8 @@ class Customer(BankingSystem):
             BankingSystem.login(self)
 
     def _confirm_cust(self):
+        """Confirms customer id is found in customer database.
+        """
         if self._cust_db.loc[self._cust_db.cust_id == self._customer_id].empty:
             self._get_activity_dt('CUST NOT FOUND')
             self._confirmed_cust = False
@@ -36,24 +66,24 @@ class Customer(BankingSystem):
             print('Customer confirmed.')
 
     def _connect_cust_db(self):
+        """Creates connection to customer database.
+        """
         self._cust_db = pd.read_csv(self._cust_db_path)
         self._get_activity_dt('CONNECTED CUST DB')
 
     @classmethod
     def gen_id(cls):
+        """Used when adding new customers and services.
+        Generates a random 6 digit integer.
+        """
         range_start = 10 ** (6 - 1)
         range_end = (10 ** 6) - 1
         return randint(range_start, range_end)
 
     def add_customer(self):
-
-        # def gen_id():
-        #     range_start = 10 ** (6 - 1)
-        #     range_end = (10 ** 6) - 1
-        #     cid = randint(range_start, range_end)
-        #     while not self._cust_db.loc[self._cust_db.cust_id == cid].empty:
-        #         gen_id()
-        #     return cid
+        """Requests the input of new customer values, adds to customer database,
+        and displays entered values.
+        """
         self._connect_cust_db()
         while True:
             new_customer_id = self.gen_id()
@@ -72,10 +102,17 @@ class Customer(BankingSystem):
         self._get_activity_dt('CUSTOMER ADDED')
 
     # def del_customer(self):
+        """To be added in future version release
+        """
     #     pass
 
     def get_customer_info(self):
+        """Requests customer id to be located and if confirmed, displays customer information.
+        """
         self._customer_id = int(input('Enter Customer ID: '))
         self._get_activity_dt('GET CUST INFO')
         self._connect_cust_db()
         self._confirm_cust()
+        if self._confirmed_cust:
+            for k, v in self.curr_cust.items():
+                print(f'{k}: {v[0]}')

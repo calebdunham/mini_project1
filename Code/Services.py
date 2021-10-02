@@ -15,37 +15,99 @@ import pandas as pd
 
 
 class Services(Customer):
+    """
+    The Services Class is where customer services are added
+    ...
+
+    Attributes
+    ----------
+    _serv_db_path : pathlib
+        path to the customer services database
+
+    Methods
+    -------
+    _confirm_serv()
+        confirms requested customer id is found in customer services database
+    _connect_serv_db()
+        connects to customer services database
+    _service_type()
+        requests the input of service type of interest and confirms input is
+        valid
+    add_service()
+        add new service
+    """
     _serv_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerServicesDB.txt')
 
     def __init__(self):
+        """
+        Parameters
+        ----------
+        _service_types : dict
+            valid service types
+        """
         Customer.__init__(self)
-        self._service_types = {'credit_card': 3, 'loan': 4}
+        self._service_types = {3: 'credit_card', 4: 'loan'}
         if self._confirmed_cust:
             pass
         else:
             print('Customer Not Confirmed')
             Customer.get_customer_info(self)
 
+    # def _confirm_serv(self):
+        """Not currently used. To be added in future version release.
+        """
+    #     if self._serv_db.loc[self._serv_db.serv_id == self._service_id].empty:
+    #         self._get_activity_dt('SERV NOT FOUND')
+    #         self._confirmed_serv = False
+    #         print('Service not found.')
+    #     else:
+    #         self.curr_cust_serv = self._serv_db.loc[self._serv_db.serv_id == self._service_id]
+    #         self._get_activity_dt('SERV CONFIRMED')
+    #         self._confirmed_cust = True
+    #         print('Service confirmed.')
+
     def _connect_serv_db(self):
+        """Creates connection to customer services database.
+        """
         self._serv_db = pd.read_csv(self._serv_db_path)
         self._get_activity_dt('CONNECTED SERV DB')
 
-    def _confirm_serv(self):
-        if self._serv_db.loc[self._serv_db.serv_id == self._service_id].empty:
-            self._get_activity_dt('SERV NOT FOUND')
-            self._confirmed_serv = False
-            print('Service not found.')
-        else:
-            self.curr_cust_serv = self._serv_db.loc[self._serv_db.serv_id == self._service_id]
-            self._get_activity_dt('SERV CONFIRMED')
-            self._confirmed_cust = True
-            print('Service confirmed.')
-
     def _service_type(self):
-        pass
+        """Requests type of service (credit_card or loan) on which activity will be performed
+        and confirms input is valid.
+        """
+        service_selected = int(input('Enter service type to add\n(3 for credit card or 4 for loan):'))
+        if not isinstance(service_selected, int):
+            print('Please enter the number 3 for credit card or 4 for loan')
+            self._service_type()
+        elif service_selected in [3, 4]:
+            self._new_serv_type = service_selected
+            self._connect_serv_db()
+        else:
+            print('The only available services are:\n\t3 -> credit card\n\t4 -> loan')
+            self._service_type()
+        self._get_activity_dt('SERVICE TYPE SELECTED')
 
     def add_service(self):
-        print(Customer.gen_id())
+        """Adds collected service values to customer services database,
+        and displays recorded values.
+        """
+        self._service_type()
+        while True:
+            new_service_id = self.gen_id()
+            if self._serv_db.loc[self._serv_db.serv_id == new_service_id].empty:
+                break
+        new_serv = pd.DataFrame({'cust_id': self._customer_id, 'serv_id': new_service_id,
+                                 'serv_type': self._service_types[self._new_serv_type],
+                                 'creation_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}, index=[0])
+        new_serv.to_csv(self._serv_db_path, mode='a', index=False, header=False)
+        print('Service Added\n-------------')
+        for k, v in new_serv.items():
+            # setattr(self, k, v[0])
+            print(f'{k}: {v[0]}')
+        self._get_activity_dt('SERVICE ADDED')
 
-    def del_service(self):
-        pass
+    # def del_service(self):
+        """To be added in future version release.
+        """
+    #     pass
