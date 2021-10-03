@@ -67,6 +67,7 @@ class Accounts(Customer):
             print('Customer account not found.')
         else:
             self.curr_acct = self._acct_db.loc[self._acct_db.cust_id == self._customer_id]
+            self.curr_acct.reset_index(drop=True, inplace=True)
             self._get_activity_dt('CUSTOMER ACCT CONFIRMED')
             self._confirmed_acct = True
             print('Customer account confirmed.')

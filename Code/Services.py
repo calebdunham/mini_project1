@@ -76,12 +76,12 @@ class Services(Customer):
         """Requests type of service (credit_card or loan) on which activity will be performed
         and confirms input is valid.
         """
-        service_selected = int(input('Enter service type to add\n(3 for credit card or 4 for loan):'))
-        if not isinstance(service_selected, int):
-            print('Please enter the number 3 for credit card or 4 for loan')
+        service_selected = input('Enter service type to add\n(3 for credit card or 4 for loan):')
+        if not service_selected.isdecimal():
+            print('Please enter the 3 for credit card or 4 for loan')
             self._service_type()
-        elif service_selected in [3, 4]:
-            self._new_serv_type = service_selected
+        elif int(service_selected) in [3, 4]:
+            self._new_serv_type = int(service_selected)
             self._connect_serv_db()
         else:
             print('The only available services are:\n\t3 -> credit card\n\t4 -> loan')

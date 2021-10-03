@@ -61,6 +61,7 @@ class Customer(BankingSystem):
             print('Customer not found.')
         else:
             self.curr_cust = self._cust_db.loc[self._cust_db.cust_id == self._customer_id]
+            self.curr_cust.reset_index(drop=True, inplace=True)
             self._get_activity_dt('CUST CONFIRMED')
             self._confirmed_cust = True
             print('Customer confirmed.')
@@ -109,7 +110,11 @@ class Customer(BankingSystem):
     def get_customer_info(self):
         """Requests customer id to be located and if confirmed, displays customer information.
         """
-        self._customer_id = int(input('Enter Customer ID: '))
+        self._customer_id = input('Enter Customer ID: ')
+        if (not self._customer_id.isdecimal()) | len(self._customer_id) != 6:
+            print('The customer id should contain only six digits.')
+            self.get_customer_info()
+        self._customer_id = int(self._customer_id)
         self._get_activity_dt('GET CUST INFO')
         self._connect_cust_db()
         self._confirm_cust()

@@ -73,6 +73,7 @@ class BankingSystem:
             print('Employee not found.')
         else:
             self.curr_emp = self._emp_db.loc[self._emp_db.emp_id == self._employee_id]
+            self.curr_emp.reset_index(drop=True, inplace=True)
             self._get_activity_dt('EMP CONFIRMED')
             self._confirmed_emp = True
             print('Employee confirmed.')
@@ -115,7 +116,11 @@ class BankingSystem:
     def login(self):
         """Requests employee id input.
         """
-        self._employee_id = int(input('Enter Employee ID: '))
+        self._employee_id = input('Enter Employee ID: ')
+        if (not self._employee_id.isdecimal()) | len(self._employee_id) != 6:
+            print('The employee id should contain only six digits.')
+            self.login()
+        self._employee_id = int(self._employee_id)
         self._get_activity_dt('LOGIN')
         self._connect_emp_db()
 
