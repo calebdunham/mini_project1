@@ -8,9 +8,8 @@
 # 
 #######################################################
 from Customer import Customer
-import pathlib
+from pathlib import Path
 from datetime import datetime
-from random import randint
 import pandas as pd
 
 
@@ -36,7 +35,7 @@ class Services(Customer):
     add_service()
         add new service
     """
-    _serv_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerServicesDB.txt')
+    _serv_db_path = Path.cwd().parents[0] / 'Databases/CustomerServicesDB.txt'
 
     def __init__(self):
         """

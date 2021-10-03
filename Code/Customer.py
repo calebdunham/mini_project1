@@ -9,7 +9,7 @@
 #######################################################
 from BankingSystem import BankingSystem
 import pandas as pd
-import pathlib
+from pathlib import Path
 from random import randint
 
 
@@ -37,7 +37,7 @@ class Customer(BankingSystem):
     get_cust_info()
         displays confirmed customer information
     """
-    _cust_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\CustomerDB.txt')
+    _cust_db_path = Path.cwd().parents[0] / 'Databases/CustomerDB.txt'
 
     def __init__(self):
         """

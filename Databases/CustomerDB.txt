@@ -10,3 +10,4 @@ cust_id,cust_fname,cust_lname,cust_info
 569473,Simon,Tam,Doctor
 227911,Shepherd,Book,Preacher
 687768,Hoban,Washburne,Pilot
+201548,Kara,Thrace,Pilot

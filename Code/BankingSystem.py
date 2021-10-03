@@ -9,7 +9,7 @@
 #######################################################
 import pandas as pd
 from datetime import datetime
-import pathlib
+from pathlib import Path
 
 
 class BankingSystem:
@@ -43,8 +43,8 @@ class BankingSystem:
     logout()
         removes employee id so no further activity can occur without new login
     """
-    _log_file = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\user_activity_log.csv')
-    _emp_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\EmployeeDB.txt')
+    _log_file = Path.cwd().parents[0] / 'Logs/user_activity_log.csv'
+    _emp_db_path = Path.cwd().parents[0] / 'Databases/EmployeeDB.txt'
 
     def __init__(self):
         """

@@ -8,7 +8,7 @@
 # 
 #######################################################
 from Customer import Customer
-import pathlib
+from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
@@ -41,7 +41,7 @@ class Accounts(Customer):
     withdrawal()
         subtracts entered withdrawal amount from customer balance
     """
-    _acct_db_path = pathlib.Path(r'G:\My Drive\Springboard\gitRepo\mini_project1\AccountActivityDB.txt')
+    _acct_db_path = Path.cwd().parents[0] / 'Databases/AccountActivityDB.txt'
 
     def __init__(self):
         """
