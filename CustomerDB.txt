@@ -6,3 +6,4 @@ cust_id,cust_fname,cust_lname,cust_info
 991146,Malcolm,Reynolds,Pilot
 654499,Kaylee,Frye,Engineer
 958099,Jayne,Cobb,Mercenary
+343462,River,Tam,Unknown
