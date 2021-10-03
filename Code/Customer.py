@@ -37,7 +37,7 @@ class Customer(BankingSystem):
     get_cust_info()
         displays confirmed customer information
     """
-    _cust_db_path = Path.cwd().parents[0] / 'Databases/CustomerDB.txt'
+    _cust_db_path = Path.cwd() / 'Databases/CustomerDB.txt'
 
     def __init__(self):
         """

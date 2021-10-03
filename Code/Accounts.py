@@ -41,7 +41,7 @@ class Accounts(Customer):
     withdrawal()
         subtracts entered withdrawal amount from customer balance
     """
-    _acct_db_path = Path.cwd().parents[0] / 'Databases/AccountActivityDB.txt'
+    _acct_db_path = Path.cwd() / 'Databases/AccountActivityDB.txt'
 
     def __init__(self):
         """

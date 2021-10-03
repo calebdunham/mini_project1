@@ -35,7 +35,7 @@ class Services(Customer):
     add_service()
         add new service
     """
-    _serv_db_path = Path.cwd().parents[0] / 'Databases/CustomerServicesDB.txt'
+    _serv_db_path = Path.cwd() / 'Databases/CustomerServicesDB.txt'
 
     def __init__(self):
         """
