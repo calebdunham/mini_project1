@@ -12,6 +12,10 @@ The BankingSystem is the parent class. It is inherited by the Customer class.
 The Customer class is inherited by the Accounts and Services classes.
 
 ### Executing the Project:
+You should be able to run BankingSytem_Demo.py if you clone the repo or download the project files and run:
+
+\>\> python setup.py install
+
 BankingSystem_Demo.py imports each object and runs the public methods contained
 in each class.
 
